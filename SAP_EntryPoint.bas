@@ -47,16 +47,16 @@ Public Sub IshmedTest()
 '
 '
 ' Makro erstellt am 25.01.2002 von berndt
-    Set objWord.oApp = Word.Application  'das war ursprünglich in AutoOpen - aber das hat gecrasht dort
-    InitCustomDocumentProperties
+Set objWord.oApp = Word.Application  'das war ursprünglich in AutoOpen - aber das hat gecrasht dort
+   InitCustomDocumentProperties
 
     Application.ScreenUpdating = False
         
     ActiveDocument.PageSetup.FirstPageTray = wdPrinterUpperBin
     ActiveDocument.PageSetup.OtherPagesTray = wdPrinterLowerBin
 
- 'On Error GoTo ErrorHandling
-    KeyWordFound = 0
+ On Error GoTo ErrorHandling
+KeyWordFound = 0
 '****************************************************************
 '* Felder Aktualisieren für Anlegedatum und Uhrzeit
 '* (Ausbauen falls in Ihrer Vorlage Felder sind die nicht
@@ -75,8 +75,8 @@ Public Sub IshmedTest()
 '*  Zugriff auf die R3/Tabelle mit den zu ändernden Schlüsselwörter
     GetR3Table
     
-'*  Große Verarbeitungsschleife ersetzt die einzelnen Texte
-    ISHins
+'*  Große Verarbeitungsschleife ersetzt die einzelnen Texte'
+ISHins
     
     
     meldungen_anzeigen

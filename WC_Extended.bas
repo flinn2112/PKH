@@ -2691,10 +2691,11 @@ Public Sub DoTEchokard(gcolEcho As Collection, gcolMesswerte As Collection)
 '
             For Each tabrow In gcolMesswerte
                 Dim ECHOUEBER2, ECHOWERT, ECHOEINH
-                ECHOUEBER2 = ""
-                ECHOWERT = ""
-                ECHOEINH = ""
-                If Trim(ECHOWERT) > "" Then  '2026 Änderung: Leerzeichen am Anfang wurde geschrieben.
+                getTabVar tabrow, "ECHOUEBER2", ECHOUEBER2, is_empty, False
+                getTabVar tabrow, "ECHOWERT", ECHOWERT, is_empty, False
+                getTabVar tabrow, "ECHOEINH", ECHOEINH, is_empty, False
+                'If Trim(ECHOWERT) > "" Then  '2026 Änderung: Leerzeichen am Anfang wurde geschrieben.
+                If Len(Trim$(ECHOWERT)) > 0 Then
                     Debug.Print "xt---" & collText
                     If Len(collText) = 0 Then 'on new
                         collText = collText & ECHOUEBER2 & " " & ECHOWERT & " " & ECHOEINH & ";"
@@ -2702,9 +2703,7 @@ Public Sub DoTEchokard(gcolEcho As Collection, gcolMesswerte As Collection)
                         collText = collText & " " & ECHOUEBER2 & " " & ECHOWERT & " " & ECHOEINH & ";"
                     End If
                 End If
-                getTabVar tabrow, "ECHOUEBER2", ECHOUEBER2, is_empty, False
-                getTabVar tabrow, "ECHOWERT", ECHOWERT, is_empty, False
-                getTabVar tabrow, "ECHOEINH", ECHOEINH, is_empty, False
+
                 
             Next
             Selection.TypeText collText
