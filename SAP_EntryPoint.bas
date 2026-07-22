@@ -1556,7 +1556,6 @@ Sub check_adress()
  F_name(11) = "ANSPRACHE"
 
  If (ActiveDocument.FormFields.Count < 11) Then
- 
     Selection.GoTo What:=wdGoToPage, Which:=wdGoToFirst
     Selection.MoveDown UNIT:=wdLine, Count:=27, Extend:=wdExtend
     Selection.Cut
@@ -1614,7 +1613,7 @@ Sub Erstschriftlich()
     Set propName1 = doc.CustomDocumentProperties("name1")
     On Error GoTo 0
 
-    If propName1 Is Nothing Then
+    If propName1 Is Nothing Or Len(propName1.Value) = 0 Then
 
         With doc.FormFields
             .Item("NAMEERST").Result = _
