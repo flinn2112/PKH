@@ -41,11 +41,10 @@ Const dokvar = "00"
 
 Global objWord As New cls_Print
 
-'Sub AutoOpen()
-'MsgBox "AutoOpen xxx"
-'    Debug.Print "Starting AutoOpen."
-'    Set objWord.oApp = Word.Application
-'End Sub
+Sub AutoOpen()
+    Debug.Print "Starting AutoOpen."
+    Set objWord.oApp = Word.Application
+End Sub
 
 
 Function ClipBoard_SetData(MyString As String)
@@ -782,38 +781,7 @@ Public Sub DoEcho(gcolEcho As Collection, gcolMesswerte As Collection)
             Selection.TypeText "Messwerte:"
             Selection.Font.Italic = False
             Selection.TypeParagraph
-            For Each tabrow In gcolMesswerte
-                Dim ECHOEINH, ECHOKAPIT, ECHONORM, ECHOUEBER2, ECHOWERT
-                If getTabVar(tabrow, "ECHOKAPIT", ECHOKAPIT, is_empty, False) Then
-                    If (ECHOKAPIT <> kapitel) Then
-                        If initialized Then
-                            Selection.TypeParagraph
-                        End If
-                        kapitel = ECHOKAPIT
-                        initialized = False
-                    End If
-                End If
-                ECHOEINH = ""
-                ECHONORM = ""
-                ECHOUEBER2 = ""
-                ECHOWERT = ""
-                getTabVar tabrow, "ECHOEINH", ECHOEINH, is_empty, False
-                getTabVar tabrow, "ECHONORM", ECHONORM, is_empty, False
-                getTabVar tabrow, "ECHOUEBER2", ECHOUEBER2, is_empty, False
-                getTabVar tabrow, "ECHOWERT", ECHOWERT, is_empty, False
-                If Trim(ECHOWERT) > "" Then
-                    If initialized Then
-                        Selection.TypeText ", "
-                    Else
-                        Selection.Font.Italic = True
-                        Selection.TypeText kapitel & ": "
-                        Selection.Font.Italic = False
-                        initialized = True
-                    End If
-                    Selection.TypeText ECHOUEBER2 & " " & ECHOWERT & " " & ECHOEINH
-                End If
-            Next
-            Selection.TypeParagraph
+            
         End If
     End If
 
@@ -2656,45 +2624,13 @@ Public Sub DoTEchokard(gcolEcho As Collection, gcolMesswerte As Collection)
             Selection.Font.Italic = False
             Selection.TypeParagraph
 '
-'            For Each tabrow In gcolMesswerte
-'                Dim ECHOEINH, ECHOKAPIT, ECHONORM, ECHOUEBER2, ECHOWERT
-'                If getTabVar(tabrow, "ECHOKAPIT", ECHOKAPIT, is_empty, False) Then
-'                    If (ECHOKAPIT <> kapitel) Then
-'                        If initialized Then
-'                            Selection.TypeParagraph
-'                        End If
-'                        kapitel = ECHOKAPIT
-'                        initialized = False
-'                    End If
-'                End If
-'                ECHOEINH = ""
-'                ECHONORM = ""
-'                ECHOUEBER2 = ""
-'                ECHOWERT = ""
-'                getTabVar tabrow, "ECHOEINH", ECHOEINH, is_empty, False
-'                getTabVar tabrow, "ECHONORM", ECHONORM, is_empty, False
-'                getTabVar tabrow, "ECHOUEBER2", ECHOUEBER2, is_empty, False
-'                getTabVar tabrow, "ECHOWERT", ECHOWERT, is_empty, False
-'                If Trim(ECHOWERT) > "" Then
-'                    If initialized Then
-'                        Selection.TypeText ", "
-'                    Else
-'                        Selection.Font.Italic = True
-'                        Selection.TypeText kapitel & ": "
-'                        Selection.Font.Italic = False
-'                        initialized = True
-'                    End If
-'                    ' Selection.TypeText ECHOUEBER2 & " " & ECHOWERT & " " & ECHOEINH
-'                    tcollText = collText & ECHOUEBER2 & " " & ECHOWERT & " " & ECHOEINH
-'                End If
-'            Next
+
 '
             For Each tabrow In gcolMesswerte
                 Dim ECHOUEBER2, ECHOWERT, ECHOEINH
                 getTabVar tabrow, "ECHOUEBER2", ECHOUEBER2, is_empty, False
                 getTabVar tabrow, "ECHOWERT", ECHOWERT, is_empty, False
                 getTabVar tabrow, "ECHOEINH", ECHOEINH, is_empty, False
-                'If Trim(ECHOWERT) > "" Then  '2026 Änderung: Leerzeichen am Anfang wurde geschrieben.
                 If Len(Trim$(ECHOWERT)) > 0 Then
                     Debug.Print "xt---" & collText
                     If Len(collText) = 0 Then 'on new
@@ -2703,8 +2639,6 @@ Public Sub DoTEchokard(gcolEcho As Collection, gcolMesswerte As Collection)
                         collText = collText & " " & ECHOUEBER2 & " " & ECHOWERT & " " & ECHOEINH & ";"
                     End If
                 End If
-
-                
             Next
             Selection.TypeText collText
             Selection.TypeParagraph

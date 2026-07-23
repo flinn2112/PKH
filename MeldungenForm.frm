@@ -16,6 +16,7 @@ Attribute VB_Exposed = False
 
 
 
+
 Private Sub CommandButton1_Click()
     Dim z, i, j, m As String
     With Me.MeldungsListe

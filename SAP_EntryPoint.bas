@@ -36,6 +36,10 @@ Sub Drucken()
 End Sub
 
 
+Public Sub onStartup()
+    'no operation here
+    Debug.Print "onStartup" '
+End Sub
 
 '****************************************************************
 'Muster Makro für IS-H*MED WordContainer Version 4.63
@@ -49,7 +53,7 @@ Public Sub IshmedTest()
 ' Makro erstellt am 25.01.2002 von berndt
 Set objWord.oApp = Word.Application  'das war ursprünglich in AutoOpen - aber das hat gecrasht dort
    InitCustomDocumentProperties
-
+   SetPersistentDate "SAP.CREATIONDATE", "AUTODATE"
     Application.ScreenUpdating = False
         
     ActiveDocument.PageSetup.FirstPageTray = wdPrinterUpperBin
