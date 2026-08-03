@@ -45,6 +45,7 @@ End Sub
 'Muster Makro für IS-H*MED WordContainer Version 4.63
 '
 Public Sub IshmedTest()
+'MsgBox "IshmedTest"
 '****************************************************************
 ' Initialisierung - Never change
 '****************************************************************
@@ -128,7 +129,10 @@ Dim bolIsValid As Boolean, prop
 Exit Sub
 '
 ErrorHandling:
-    MsgBox "Die Fehlerbehandlung hat zugeschlagen mit Error: " + str(Err.Number)
+    'MsgBox "Die Fehlerbehandlung hat zugeschlagen mit Error: " + str(Err.Number)
+    MsgBox "Err=" & Err.Number & vbCrLf & _
+       "Description=" & Err.Description & vbCrLf & _
+       "Source=" & Err.Source
     Error Err.Number
 '
 End Sub
@@ -368,7 +372,9 @@ DumpCollectionImmediate gcolErreger
             Dim antikoerper As Collection, transfusionen As Collection, summen As Collection
             getTabOfInst inst, gcolData, "ZBLUTPRO:Y000000900", antikoerper
             getTabOfInst inst, gcolData, "ZBLUTPRO:Y000000903", summen
-            DoBlutprod inst, antikoerper, summen
+            '2026: Transfusionen
+            getTabOfInst inst, gcolData, "ZBLUTPRO:Y000000901", transfusionen
+            DoBlutprod inst, antikoerper, transfusionen, summen
         Next
     End If
     If getColl(gcolData, "ZERREGER:Y000000G00", doktyp) Then
@@ -997,7 +1003,7 @@ Private Sub DoCase(gcolData As Collection, key As String, inst_key As String, co
         Dim tab_key, var_key, row_key
         Dim tabelle As Collection, tabrow As Collection, var As Collection
         
-        keys = Split(Mid(key, 2, Len(key) - 2), "-")
+        keys = Split(Mid(key, 2, Len(key) - 2), "-") '2026 fagile, risky
         tab_key = keys(0) & ""
         var_key = keys(1) & ""
         row_key = Right(dokvar & lfn, Len(dokvar)) ' Innerhalb einer Tabelle die Zeilenummer
@@ -1017,7 +1023,7 @@ Private Sub DoCase(gcolData As Collection, key As String, inst_key As String, co
             instanz.Add tabrow, row_key
         End If
         
-        If Not getColl(tabrow, var_key, var) Then
+        If Not getColl(tabrow, var_key, var) Then  'insert if not already done
             Set var = New Collection
             tabrow.Add var, var_key
             var.Add tab_key, "tab_key"
@@ -1028,7 +1034,15 @@ Private Sub DoCase(gcolData As Collection, key As String, inst_key As String, co
         var.Add content
 
     End If
-
+    
+    'nur test bug bounty 2026
+    'ISHInsert key, content
+    'Exit Sub
+    '2026 OK, here entropy levels rising, if unknown datapoints these just get ignored.
+    'especially striking on Transfusionen.
+    'it is rediculous and blocks maintainance.
+    'Since now this compares to a full string but we need to compare to a substring for certain values.
+    'Here add all that start with ZBLUTPRO:Y000000901
     Select Case key
     Case "[NPAT-ANRED]"
         Select Case content
@@ -1108,9 +1122,15 @@ Case "[USER:PROCTAB-PROC_LANGTEXT]"
 ' Ende der User-Abhängigen Programmierung
 '****************************************************************
     Case Else
-       If Right(key, 4) <> "<L>]" Then
+       If Right(key, 4) <> "<L>]" Then '2026: and what do you mean by that? <L>???
          ISHReplaceAll key, content
        End If
+       If InStr(1, key, "[ZBLUTPRO:Y000000901-") = 1 Then
+            ISHInsert key, content
+        Else 'anyway is that not an error.
+            Debug.Print "unknown key arrived, ignored[" & key & "} Value[" & content & "]"
+        End If
+       
 'Sinnvoll wärend der Test/Einführungsphase zu aktivieren,
 'damit Fehler in der Kommunikation gefunden werden
     'EndDokument

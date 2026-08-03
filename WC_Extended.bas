@@ -42,8 +42,13 @@ Const dokvar = "00"
 Global objWord As New cls_Print
 
 Sub AutoOpen()
-    Debug.Print "Starting AutoOpen."
-    Set objWord.oApp = Word.Application
+'MsgBox "ActiveDocument.ReadOnly = " & ActiveDocument.ReadOnly
+'MsgBox "Autoopen"
+Debug.Print "Starting AutoOpen."
+Debug.Print "ActiveDocument.FullName = " & ActiveDocument.FullName
+Debug.Print "ActiveDocument.ReadOnly = " & ActiveDocument.ReadOnly
+Debug.Print "AttachedTemplate = " & ActiveDocument.AttachedTemplate.FullName
+    'Set objWord.oApp = Word.Application
 End Sub
 
 
@@ -3503,7 +3508,7 @@ Public Sub DoMedikationNeu(kopf As Collection, medis As Collection)
 End Sub
 
 ' Transfusionen werden nur in der Summe uebernommen, nicht einzeln die Tabelle abgeklappert
-Public Sub DoBlutprod(col As Collection, antikoerper As Collection, summen As Collection)
+Public Sub DoBlutprod(col As Collection, antikoerper As Collection, transfusionen As Collection, summen As Collection)
     Dim sumTrans As Long      'Summe der Transfusionen
     Dim is_empty As Boolean
     Dim i As Long
@@ -3517,7 +3522,9 @@ Public Sub DoBlutprod(col As Collection, antikoerper As Collection, summen As Co
     Dim antikoerper_vorhanden As Boolean
     Dim BLUTGRUPP, CDEFORMEL, EBSUMME, EFFPSUM, EKLISUMME, EKLSUMME, FFPISUMME, FFPSUMME, _
         FFPVSUMME, RHESUSFKT, TKGPISUMM, TKGPSUMME, TKLISUMME, TKLSUMME, befund
-
+    Dim entry As Collection
+    
+    Dim datum As String, text As String, feld, zeile As Object, time As String
     ActiveDocument.Bookmarks("Blutprodukte").Select
     set_format
     getDocVar col, "ZBLUTGRUPP", BLUTGRUPP, is_empty, False
@@ -3564,14 +3571,35 @@ Public Sub DoBlutprod(col As Collection, antikoerper As Collection, summen As Co
     ' Ausgabe der Blutparameter (dabei wird die zuvor ggf. "gestutzte" KELL-Formel am Ende verwendet):
     Selection.TypeText "Blutgruppe: " & BLUTGRUPP & " Rhesus-Faktor: " & RHESUSFKT & vbNewLine & "CDE Formel mit Kell: " & s
     Selection.TypeParagraph
+    '2026: to satisfy the requirement to output a warning text if Header Rhesus does contradict
+    If Trim$(RHESUSFKT) = "" Or transfusionen Is Nothing Then
+        'header rhesus empty not checking.
+    Else
+        For Each zeile In transfusionen  '2026 xt
+            'getTabVar entry, "X00ESUSFKT", text, is_empty, False
+            Dim v As Variant
+            For Each v In zeile
+                On Error Resume Next
+                getTabVar zeile, "X01ESUSFKT", text, is_empty, False  '!PMD Field changed from ZRHESUSFKT to X01ESUSFKT
+                '2026: validity check Header Rhesus got to match the table entries Rhesus.
+                If RHESUSFKT = "POS" And text = "N" Or RHESUSFKT = "NEG" And text = "P" Then
+                    handleRhesusFactorMismatch
+                End If
+                
+                
+                If Err.Number <> 0 Then
+                    Debug.Print "Error:", Err.Number, Err.Description
+                    Err.Clear
+                End If
+                On Error GoTo 0
+            Next
+        Next
+    End If
     
     If antikoerper_vorhanden Then
         ' Ermitteln des jüngsten Antikörperstatus-Eintrags:
         Dim t As String
         d = ""
-   
-        Dim datum As String, text As String, feld, zeile As Object, time As String
-        
         For Each zeile In antikoerper
             getTabVar zeile, "ZAKSTDAT", datum, is_empty, False
             getTabVar zeile, "ZAKSTUHR", time, is_empty, False
