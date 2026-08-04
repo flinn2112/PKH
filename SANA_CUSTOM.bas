@@ -90,7 +90,14 @@ Public Sub SetPersistentDate(ByVal strVariableName As String, _
 End Sub
 
 '2026
+'Rh+ Rh+ ? Compatible
+'Rh+ Rh- ? Compatible (safe)
+'Rh- Rh- ? Compatible
+'Rh- Rh+ ?? Potentially dangerous
 Public Function handleRhesusFactorMismatch()
+    Selection.Range.FormattedText = _
+        ActiveDocument.Bookmarks("BM_TRANSFUSION_WARNING").Range.FormattedText
 
+    Selection.TypeParagraph
 End Function
 

@@ -3517,7 +3517,7 @@ Public Sub DoBlutprod(col As Collection, antikoerper As Collection, transfusione
     Dim d As String              'Datum, enthält jüngstes Datum der Antikörperstatusdaten
     Dim timeLastestEntry As String 'Uhrzeit, enthält jüngste Uhrzeit der Antikörperstatusdaten
     Dim p1, p2 As Long        'Position eines Leerzeichens in einem String
-    Dim s As String              'Hilfstext, der den Wert eines Datenfeldes temp. aufnimmt
+    Dim sFormel As String              'Hilfstext, der den Wert eines Datenfeldes temp. aufnimmt
     Dim summen_vorhanden As Boolean
     Dim antikoerper_vorhanden As Boolean
     Dim BLUTGRUPP, CDEFORMEL, EBSUMME, EFFPSUM, EKLISUMME, EKLSUMME, FFPISUMME, FFPSUMME, _
@@ -3563,36 +3563,46 @@ Public Sub DoBlutprod(col As Collection, antikoerper As Collection, transfusione
     p1 = Len(CDEFORMEL)
     
     If p1 > 0 Then
-        s = CDEFORMEL                    'Verwendet den kompletten Wert aus KELL-Formel
+        sFormel = CDEFORMEL                    'Verwendet den kompletten Wert aus KELL-Formel
     Else
-        s = "keine Angabe"
+        sFormel = "keine Angabe"
     End If
     
-    ' Ausgabe der Blutparameter (dabei wird die zuvor ggf. "gestutzte" KELL-Formel am Ende verwendet):
-    Selection.TypeText "Blutgruppe: " & BLUTGRUPP & " Rhesus-Faktor: " & RHESUSFKT & vbNewLine & "CDE Formel mit Kell: " & s
-    Selection.TypeParagraph
     '2026: to satisfy the requirement to output a warning text if Header Rhesus does contradict
+    
+    
+    
+    ' Ausgabe der Blutparameter (dabei wird die zuvor ggf. "gestutzte" KELL-Formel am Ende verwendet):
+    Selection.TypeText "Blutgruppe: " & BLUTGRUPP & " Rhesus-Faktor: " & RHESUSFKT & vbNewLine & "CDE Formel mit Kell: " & sFormel
+    Selection.TypeParagraph
     If Trim$(RHESUSFKT) = "" Or transfusionen Is Nothing Then
         'header rhesus empty not checking.
     Else
         For Each zeile In transfusionen  '2026 xt
             'getTabVar entry, "X00ESUSFKT", text, is_empty, False
             Dim v As Variant
-            For Each v In zeile
+            'For Each v In zeile
                 On Error Resume Next
                 getTabVar zeile, "X01ESUSFKT", text, is_empty, False  '!PMD Field changed from ZRHESUSFKT to X01ESUSFKT
+                If Trim$(text) = "" Or text = "N" Then
+                    GoTo SKIP_ITEM
+                End If
                 '2026: validity check Header Rhesus got to match the table entries Rhesus.
-                If RHESUSFKT = "POS" And text = "N" Or RHESUSFKT = "NEG" And text = "P" Then
+                'Rh+ Rh+ ? Compatible
+                'Rh+ Rh- ? Compatible (safe)
+                'Rh- Rh- ? Compatible
+                'Rh- Rh+ ?? Potentially dangerous
+                If RHESUSFKT = "NEG" And text = "P" Then
                     handleRhesusFactorMismatch
                 End If
-                
                 
                 If Err.Number <> 0 Then
                     Debug.Print "Error:", Err.Number, Err.Description
                     Err.Clear
                 End If
                 On Error GoTo 0
-            Next
+SKIP_ITEM:
+            'Next
         Next
     End If
     
