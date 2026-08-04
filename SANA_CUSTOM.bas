@@ -94,10 +94,27 @@ End Sub
 'Rh+ Rh- ? Compatible (safe)
 'Rh- Rh- ? Compatible
 'Rh- Rh+ ?? Potentially dangerous
-Public Function handleRhesusFactorMismatch()
-    Selection.Range.FormattedText = _
-        ActiveDocument.Bookmarks("BM_TRANSFUSION_WARNING").Range.FormattedText
+Public Sub handleRhesusFactorMismatch(ByVal rng As Range)
+
+    Dim lStart As Long
+    Dim rngWarn As Range
+
+    rng.Select
+
+    lStart = Selection.Start
+
+    Selection.TypeText _
+        "Während des stationären Aufenthaltes wurde der/die RhD-negative Patient/in unter Abwägung von Nutzen und Risiken Rhesus inkompatibel transfundiert." & vbCrLf & _
+        "Gemäß §§ 12a und 18 Transfusionsgesetz wurde der Patient sowie der weiterbehandelnde Arzt darüber informiert. Des Weiteren informieren wir darüber, dass bei dem Patienten eine serologische Untersuchung 2-4 Monate nach Transfusion zur Feststellung gebildeter Antikörper durchzuführen ist." & vbCrLf & _
+        "Bei Nachweis entsprechender Antikörper hat eine Aufklärung und Beratung sowie die Eintragung in einen Notfallpass zu erfolgen."
+
+    Set rngWarn = ActiveDocument.Range(lStart, Selection.End)
+
+    With rngWarn.Font
+        .Bold = True
+        .Color = wdColorRed
+    End With
 
     Selection.TypeParagraph
-End Function
 
+End Sub

@@ -3593,7 +3593,8 @@ Public Sub DoBlutprod(col As Collection, antikoerper As Collection, transfusione
                 'Rh- Rh- ? Compatible
                 'Rh- Rh+ ?? Potentially dangerous
                 If RHESUSFKT = "NEG" And text = "P" Then
-                    handleRhesusFactorMismatch
+                    handleRhesusFactorMismatch Selection.Range
+                    GoTo EXIT_LOOP
                 End If
                 
                 If Err.Number <> 0 Then
@@ -3605,6 +3606,7 @@ SKIP_ITEM:
             'Next
         Next
     End If
+EXIT_LOOP:
     
     If antikoerper_vorhanden Then
         ' Ermitteln des jüngsten Antikörperstatus-Eintrags:
