@@ -2,9 +2,9 @@ VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} Auswahl 
    Caption         =   "Datenauswahl"
    ClientHeight    =   7140
-   ClientLeft      =   45
-   ClientTop       =   330
-   ClientWidth     =   10215
+   ClientLeft      =   48
+   ClientTop       =   336
+   ClientWidth     =   10212
    OleObjectBlob   =   "Auswahl.frx":0000
    StartUpPosition =   1  'Fenstermitte
 End
