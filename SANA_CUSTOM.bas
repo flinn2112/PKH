@@ -29,13 +29,9 @@ Private Sub EnsureDocumentProperty(ByVal PropertyName As String)
 End Sub
 
 Public Sub InitCustomDocumentProperties()
-
     Dim i As Integer
-
     EnsureDocumentProperty "IsSaved"
-
     For i = 1 To 7
-
         EnsureDocumentProperty "name" & i
         EnsureDocumentProperty "anrede" & i
         EnsureDocumentProperty "ansprache" & i
@@ -43,9 +39,8 @@ Public Sub InitCustomDocumentProperties()
         EnsureDocumentProperty "strass" & i
         EnsureDocumentProperty "plz" & i
         EnsureDocumentProperty "ort" & i
-
+        EnsureDocumentProperty "land" & i
     Next i
-
 End Sub
 
 Public Sub SetPersistentDate(ByVal strVariableName As String, _
