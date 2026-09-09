@@ -18,6 +18,7 @@ Attribute VB_Exposed = False
 
 
 
+
 Option Explicit
 Rem *******************************
 Rem OK-Button
@@ -36,7 +37,7 @@ Rem *******************************
 Rem Übernehmen-Button
 Rem *******************************
 Private Sub CommandButton3_Click()
-    'BUG  SaveProperties
+     SaveProperties
 End Sub
 
 

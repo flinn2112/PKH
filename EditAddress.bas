@@ -4,6 +4,42 @@ Rem *******************************************************************
 Rem Auslesen der Felder aus den CustomDocumentProperties
 Rem *******************************************************************
 
+
+Public Sub AddressRibbonOnAction(control As IRibbonControl)
+
+    Select Case control.ID
+
+        Case "btnEditAddress"
+            EditAddress
+
+        Case "btnPrintErstschriftlich"
+            PrintErstschriftlich
+
+        Case "btnPrintNachrichtlich2"
+            PrintNachrichtlich2
+
+        Case "btnPrintNachrichtlich3"
+            PrintNachrichtlich3
+
+        Case "btnPrintNachrichtlich4"
+            PrintNachrichtlich4
+
+        Case "btnPrintNachrichtlich5"
+            PrintNachrichtlich5
+
+        Case "btnPrintNachrichtlich6"
+            PrintNachrichtlich6
+
+        Case "btnPrintNachrichtlich7"
+            PrintNachrichtlich7
+
+        Case "btnPrintAll"
+            PrintAll
+
+    End Select
+
+End Sub
+
 Sub EditAddress()
     
     Dim ad As Object
