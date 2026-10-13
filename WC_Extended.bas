@@ -2090,44 +2090,15 @@ Public Sub DoDiagnosen(tb As Collection)
             getTabVar tabrow, "DIA_DKEY", key, is_empty, False
             getTabVar tabrow, "DIA_LANGTEXT<L>", langtext, is_empty, False
             langtext = Replace(langtext, vbCrLf, vbCrLf & vbTab)
-            Selection.TypeText key & vbTab & langtext
+            'XT 2026 - that will create a messy output when key is empty: Selection.TypeText key & vbTab & langtext
+            If Len(Trim(key)) > 0 Then
+                Selection.TypeText key & vbTab & langtext
+            Else
+                Selection.TypeText langtext
+            End If
+            
             Selection.TypeParagraph
         Next
-    
-    
-'        anlegenTabelle mytable, breiten(), ueberschriften(), False
-'        Dim erste_zeile As Boolean
-'        erste_zeile = True
-'        For Each tabrow In tb
-'            getTabVar tabrow, "DIA_DKEY", key, is_empty, False
-'            getTabVar tabrow, "DIA_LANGTEXT<L>", langtext, is_empty, False
-'            If erste_zeile = False Then
-'                Set tr = mytable.Rows.Add()
-'            Else
-'                Set tr = mytable.Rows(1)
-'                erste_zeile = False
-'            End If
-'            tr.Cells(1).Range.text = key
-'            tr.Cells(2).Range.text = langtext
-'        Next
-'        abschliessenTabelle mytable, False
-'        With mytable
-'            .Rows.SetLeftIndent LeftIndent:=0, RulerStyle:=wdAdjustNone
-'            .Borders(wdBorderLeft).LineStyle = wdLineStyleNone
-'            .Borders(wdBorderRight).LineStyle = wdLineStyleNone
-'            .Borders(wdBorderTop).LineStyle = wdLineStyleNone
-'            .Borders(wdBorderBottom).LineStyle = wdLineStyleNone
-'            .Borders(wdBorderVertical).LineStyle = wdLineStyleNone
-'            .Borders(wdBorderHorizontal).LineStyle = wdLineStyleNone
-'            .Borders(wdBorderDiagonalDown).LineStyle = wdLineStyleNone
-'            .Borders(wdBorderDiagonalUp).LineStyle = wdLineStyleNone
-'            .Borders.Shadow = False
-'        End With
-'        With Options
-'            .DefaultBorderLineStyle = wdLineStyleSingle
-'            .DefaultBorderLineWidth = wdLineWidth050pt
-'            .DefaultBorderColor = wdColorAutomatic
-'        End With
     End If
 End Sub
 
@@ -3592,7 +3563,7 @@ Public Sub DoBlutprod(col As Collection, antikoerper As Collection, transfusione
                 'Rh+ Rh- ? Compatible (safe)
                 'Rh- Rh- ? Compatible
                 'Rh- Rh+ ?? Potentially dangerous
-                If RHESUSFKT = "NEG" And text = "P" Then
+                If RHESUSFKT = "NEG" And text = "P" Then '2026 Rhesus Mismatch
                     handleRhesusFactorMismatch Selection.Range
                     GoTo EXIT_LOOP
                 End If
