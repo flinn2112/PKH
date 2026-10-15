@@ -513,11 +513,12 @@ DumpCollectionImmediate gcolErreger
             DoBefund inst, "Sonographie Schilddrüse vom ", "Sonosd"
         Next
     End If
-    If getColl(gcolData, "ZTSONOGR:Z00000000000000L", doktyp) Then '2026 Umstellung auf Tomtec
-        For Each inst In doktyp
-            DoBefund inst, "Sonographie vom ", "Sonograf"
-        Next
-    End If
+    '2026 - Sono ist wohl von VAMED neu implementiert worden, deshalb hier weg
+    'If getColl(gcolData, "ZTSONOGR:Z00000000000000L", doktyp) Then '2026 Umstellung auf Tomtec
+    '    For Each inst In doktyp
+    '        DoBefund inst, "Sonographie vom ", "Sonograf"
+    '    Next
+    'End If
     If getColl(gcolData, "ZSCHRITT:Y000001F", doktyp) Then
         For Each inst In doktyp
             getTabOfInst inst, gcolData, "ZSCHRITT:Y000001F00", tb
@@ -575,17 +576,19 @@ DumpCollectionImmediate gcolErreger
             DoBefund inst, "Konsil Zahnarzt vom ", "Zahkonsil"
         Next
     End If
-    If getColl(gcolData, "ZTECHOKA:Z00000000000000J", doktyp) Then 'Head
-        Debug.Print "ZECHOKA:Z00000000000000J FOUND"
-        For Each inst In doktyp
-            getTabOfInst inst, gcolData, "ZTECHOKA:Z00000000000000K", tb
-            DoEcho inst, tb
+    '2026 - das ist obsolet anscheinend, da EM(VAMED) das nochmal neu implementiert hat.
+    'If getColl(gcolData, "ZTECHOKA:Z00000000000000J", doktyp) Then 'Head
+     '   Debug.Print "ZECHOKA:Z00000000000000J FOUND"
+     '   For Each inst In doktyp
+   '         getTabOfInst inst, gcolData, "ZTECHOKA:Z00000000000000K", tb
+    '        DoEcho inst, tb
             'Neu, 25.04.06 von KD, Ausgabe der Daten aus dem doktyp 6-Minuten-Gehtest:
             '(auf Anforderung direkt hinter Echo ausgeben)
-        Next
-    Else
-        Debug.Print "ZECHOKA:00000000000000J NOT FOUND"
-    End If
+    '    Next
+   ' Else
+    '    Debug.Print "ZECHOKA:00000000000000J NOT FOUND"
+   ' End If
+    
     If getColl(gcolData, "ZEPIKRIS:Y000001A", doktyp) Then
         For Each inst In doktyp
             DoBefund inst, "Epikrise: ", "Epikrise"
@@ -598,7 +601,6 @@ DumpCollectionImmediate gcolErreger
         Next
     End If
     
-
     ' EM_20250701: Tomtec Echokardio kommt hinzu --------------------------------------
     '(auf Anforderung direkt vor Mikrobiologie (Erreger) ausgeben)
     Debug.Print "V71 xt 2026: VOR Tomtec Daten " & Now()
@@ -629,6 +631,7 @@ DumpCollectionImmediate gcolErreger
         Debug.Print "ZTSONOGR:Z00000000000000L NOT FOUND"
     End If
     Debug.Print "V71 xt 2026: NACH Tomtec Daten " & Now()
+    
     ' --------------------------------------------------------------------------------
     
     If getColl(gcolData, "KOERPUNT:ZKOERPUNT", doktyp) Then
@@ -1611,12 +1614,7 @@ Sub check_adress()
     ActiveDocument.FormFields(11).name = F_name(11)
     Selection.TypeText ","
     Selection.TypeParagraph
-      
   End If
- 
- 
-
-
 End Sub
 
 

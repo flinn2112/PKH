@@ -795,6 +795,7 @@ Public Sub DoEcho(gcolEcho As Collection, gcolMesswerte As Collection)
         Selection.Font.Italic = True
         Selection.TypeText "Befund:"
         Selection.Font.Italic = False
+        Selection.ParagraphFormat.Alignment = wdAlignParagraphJustify 'xt 10/2026 auf Wunsch Blocksatz
         Selection.TypeParagraph
         print_langtext echoBef
     End If
@@ -804,6 +805,7 @@ Public Sub DoEcho(gcolEcho As Collection, gcolMesswerte As Collection)
         Selection.Font.Italic = True
         Selection.TypeText "Beurteilung:"
         Selection.Font.Italic = False
+        Selection.ParagraphFormat.Alignment = wdAlignParagraphJustify 'xt 10/2026 auf Wunsch Blocksatz
         Selection.TypeParagraph
         print_langtext ECHOBEUTX
     End If
@@ -1593,6 +1595,7 @@ Sub DoBefund(konsil As Collection, Text_ueberschrift As String, Text_marke As St
         Selection.TypeText text:="Indikation: "
         Selection.Font.Italic = False
         Selection.TypeText text:=fragest
+        Selection.Style = ActiveDocument.Styles("PKH_2026_BLOCKSATZ") 'xt 10/2026 auf Wunsch Blocksatz
         Selection.TypeParagraph
     End If
     If emedik > "" Then
@@ -1600,6 +1603,7 @@ Sub DoBefund(konsil As Collection, Text_ueberschrift As String, Text_marke As St
         Selection.TypeText text:="Medikation: "
         Selection.Font.Italic = False
         Selection.TypeText text:=emedik
+        Selection.Style = ActiveDocument.Styles("PKH_2026_BLOCKSATZ") 'xt 10/2026 auf Wunsch Blocksatz
         Selection.TypeParagraph
     End If
     If befund > "" Then
@@ -1607,6 +1611,7 @@ Sub DoBefund(konsil As Collection, Text_ueberschrift As String, Text_marke As St
         Selection.TypeText text:="Befund: "
         Selection.Font.Italic = False
         Selection.TypeText text:=befund
+        Selection.Style = ActiveDocument.Styles("PKH_2026_BLOCKSATZ") 'xt 10/2026 auf Wunsch Blocksatz
         Selection.TypeParagraph
     End If
     If beurteilung > "" Then
@@ -1614,6 +1619,7 @@ Sub DoBefund(konsil As Collection, Text_ueberschrift As String, Text_marke As St
         Selection.TypeText text:="Beurteilung: "
         Selection.Font.Italic = False
         Selection.TypeText text:=beurteilung
+        Selection.Style = ActiveDocument.Styles("PKH_2026_BLOCKSATZ") 'xt 10/2026 auf Wunsch Blocksatz
         Selection.TypeParagraph
     End If
     If procedere > "" Then
@@ -1623,10 +1629,12 @@ Sub DoBefund(konsil As Collection, Text_ueberschrift As String, Text_marke As St
         End If
         Selection.Font.Italic = False
         Selection.TypeText text:=procedere
+        Selection.Style = ActiveDocument.Styles("PKH_2026_BLOCKSATZ") 'xt 10/2026 auf Wunsch Blocksatz
         Selection.TypeParagraph
     End If
     If anamn > "" Then
         Selection.TypeText text:=anamn
+        Selection.Style = ActiveDocument.Styles("PKH_2026_BLOCKSATZ") 'xt 10/2026 auf Wunsch Blocksatz
         Selection.TypeParagraph
     End If
 End Sub
@@ -2096,7 +2104,7 @@ Public Sub DoDiagnosen(tb As Collection)
             Else
                 Selection.TypeText langtext
             End If
-            
+            Selection.ParagraphFormat.Alignment = wdAlignParagraphJustify
             Selection.TypeParagraph
         Next
     End If
@@ -2617,6 +2625,7 @@ Public Sub DoTEchokard(gcolEcho As Collection, gcolMesswerte As Collection)
                 End If
             Next
             Selection.TypeText collText
+            
             Selection.TypeParagraph
         End If
     End If
@@ -2630,6 +2639,7 @@ Public Sub DoTEchokard(gcolEcho As Collection, gcolMesswerte As Collection)
         Selection.Font.Italic = False
         Selection.TypeParagraph
         Selection.TypeText text:=echoBef
+        Selection.ParagraphFormat.Alignment = wdAlignParagraphJustify 'XT 10/2026 auf Wunsch Dr. Knierim.
         Selection.TypeParagraph
     End If
     
@@ -2642,6 +2652,7 @@ Public Sub DoTEchokard(gcolEcho As Collection, gcolMesswerte As Collection)
         Selection.Font.Italic = False
         Selection.TypeParagraph
         Selection.TypeText text:=echoBeur
+        Selection.ParagraphFormat.Alignment = wdAlignParagraphJustify 'XT 10/2026 auf Wunsch Dr. Knierim.
         Selection.TypeParagraph
     End If
     
@@ -2654,6 +2665,7 @@ Public Sub DoTEchokard(gcolEcho As Collection, gcolMesswerte As Collection)
         Selection.Font.Italic = False
         Selection.TypeParagraph
         Selection.TypeText text:=echoProz
+        Selection.ParagraphFormat.Alignment = wdAlignParagraphJustify 'XT 10/2026 auf Wunsch Dr. Knierim.
         Selection.TypeParagraph
     End If
     
@@ -2666,6 +2678,7 @@ Public Sub DoTEchokard(gcolEcho As Collection, gcolMesswerte As Collection)
         Selection.Font.Italic = False
         Selection.TypeParagraph
         Selection.TypeText text:=echoFrag
+        Selection.ParagraphFormat.Alignment = wdAlignParagraphJustify 'XT 10/2026 auf Wunsch Dr. Knierim.
         Selection.TypeParagraph
     End If
     
@@ -2710,8 +2723,8 @@ Public Sub DoTSonograf(tb As Collection, counter As Integer)
         Selection.Font.Italic = False
         Selection.TypeParagraph
         Selection.TypeText text:=sonoBef
+        Selection.ParagraphFormat.Alignment = wdAlignParagraphJustify 'XT 10/2026 auf Wunsch Dr. Knierim.
         Selection.TypeParagraph
-        
     End If
     
     ' Abschnitt Beurteilung
@@ -2723,6 +2736,7 @@ Public Sub DoTSonograf(tb As Collection, counter As Integer)
         Selection.Font.Italic = False
         Selection.TypeParagraph
         Selection.TypeText text:=sonoBeur
+        Selection.ParagraphFormat.Alignment = wdAlignParagraphJustify 'XT 10/2026 auf Wunsch Dr. Knierim.
         Selection.TypeParagraph
     End If
     
@@ -2735,6 +2749,7 @@ Public Sub DoTSonograf(tb As Collection, counter As Integer)
         Selection.Font.Italic = False
         Selection.TypeParagraph
         Selection.TypeText text:=sonoProz
+        Selection.ParagraphFormat.Alignment = wdAlignParagraphJustify 'XT 10/2026 auf Wunsch Dr. Knierim.
         Selection.TypeParagraph
     End If
     
@@ -3891,7 +3906,7 @@ Public Sub DoGehtest(gcolGehTest As Collection, tb As Collection)
         ' Ausgabe des Befundtextes:
         Selection.TypeText "Befund: " & ZBEFTEXT
     End If
-
+    Selection.ParagraphFormat.Alignment = wdAlignParagraphJustify 'xt 10/2026 auf Wunsch Blocksatz
     Selection.TypeParagraph
     
 End Sub 'DoGehtest
